@@ -20,7 +20,7 @@ export default class Home extends Component {
   };
 
   searchItems = searchTerm => {
-    console.log('searchitems');
+    console.log("searchitems");
     let endpoint = "";
     this.setState({
       movies: [],
@@ -36,7 +36,6 @@ export default class Home extends Component {
     }
     console.log(endpoint);
     this.fetchItem(endpoint);
-
   };
 
   loadMoreItems = () => {
@@ -62,12 +61,13 @@ export default class Home extends Component {
     fetch(endpoint)
       .then(result => result.json())
       .then(result => {
-        console.log('fetchitem');
+        console.log("fetchitem");
         this.setState({
           movies: [...this.state.movies, ...result.results],
           heroImage: this.state.heroImage || result.results[0],
           currentPage: result.page,
-          totalPages: result.total_pages
+          totalPages: result.total_pages,
+          loading:false
         });
       });
   };

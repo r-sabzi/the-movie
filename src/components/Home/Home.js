@@ -26,7 +26,6 @@ export default class Home extends Component {
   };
 
   searchItems = searchTerm => {
-    console.log("searchitems");
     let endpoint = "";
     this.setState({
       movies: [],
@@ -40,7 +39,7 @@ export default class Home extends Component {
         this.state.searchTerm
       }`;
     }
-    console.log(endpoint);
+
     this.fetchItem(endpoint);
   };
 
@@ -67,7 +66,6 @@ export default class Home extends Component {
     fetch(endpoint)
       .then(result => result.json())
       .then(result => {
-        console.log("fetchitem");
         this.setState({
           movies: [...this.state.movies, ...result.results],
           heroImage: this.state.heroImage || result.results[0],

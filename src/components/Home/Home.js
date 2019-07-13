@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import "./Home.css";
-import { API_KEY, API_URL, IMAGE_BASE_URL, BACKDROP_SIZE } from "../../config";
+import {
+  API_KEY,
+  API_URL,
+  IMAGE_BASE_URL,
+  BACKDROP_SIZE,
+  POSTER_SIZE
+} from "../../config";
 
 import HeroImage from "../elements/HeroImage/HeroImage";
 import SearchBar from "../elements/SearchBar/SearchBar";
@@ -30,7 +36,7 @@ export default class Home extends Component {
     if (searchTerm === "") {
       endpoint = `${API_URL}movie/popular?api_key=${API_KEY}`;
     } else {
-      endpoint = `${API_URL}search/movie?api_key=${API_KEY}&query${
+      endpoint = `${API_URL}search/movie?api_key=${API_KEY}&query=${
         this.state.searchTerm
       }`;
     }
@@ -45,7 +51,7 @@ export default class Home extends Component {
       endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&page=${this.state
         .currentPage + 1}`;
     } else {
-      endpoint = `${API_URL}search/movie?api_key=${API_KEY}&query${
+      endpoint = `${API_URL}search/movie?api_key=${API_KEY}&query=${
         this.state.searchTerm
       }&page=${this.state.currentPage + 1}`;
     }
@@ -67,7 +73,7 @@ export default class Home extends Component {
           heroImage: this.state.heroImage || result.results[0],
           currentPage: result.page,
           totalPages: result.total_pages,
-          loading:false
+          loading: false
         });
       });
   };
@@ -87,9 +93,33 @@ export default class Home extends Component {
             <SearchBar callback={this.searchItems} />
           </div>
         ) : null}
-        <FourColGrid />
-        <Spinner />
-        <LoadMoreBtn />
+        <div className="rmdb-home-grid">
+          <FourColGrid
+            header={this.state.searchTerm ? "Search Results" : "Popular Movies"}
+            loading={this.state.loading}
+          >
+            {this.state.movies.map((element, i) => {
+              return (
+                <MovieThumb
+                  key={i}
+                  clickable={true}
+                  image={
+                    element.poster_path
+                      ? `${IMAGE_BASE_URL}${POSTER_SIZE}/${element.poster_path}`
+                      : "./images/no_image.jpg"
+                  }
+                  movieId={element.id}
+                  movieName={element.original_title}
+                />
+              );
+            })}
+          </FourColGrid>
+          {this.state.loading ? <Spinner /> : null}
+          {this.state.currentPage <= this.state.totalPages &&
+          !this.state.loading ? (
+            <LoadMoreBtn text="Load More" onClick={this.loadMoreItems} />
+          ) : null}
+        </div>
       </div>
     );
   }

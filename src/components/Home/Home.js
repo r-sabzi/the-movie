@@ -18,6 +18,20 @@ export default class Home extends Component {
     totalPages: 0,
     searchTerm: ""
   };
+  loadMoreItems = () => {
+    let endpoint = "";
+    this.setState({ loading: true });
+    if (this.state.searchTerm === "") {
+      endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&page=${this.state
+        .currentPage + 1}`;
+    } else {
+      endpoint = `${API_KEY}search/movie/?api_key=${API_KEY}&query${
+        this.state.searchTerm
+      }&page=${this.state.currentPage + 1}`;
+    }
+    this.fetchItem(endpoint);
+  };
+
   componentDidMount() {
     this.setState({ loading: true });
     const endPoint = `${API_URL}movie/popular?api_key=${API_KEY}`;
@@ -27,11 +41,12 @@ export default class Home extends Component {
     fetch(endpoint)
       .then(result => result.json())
       .then(result => {
-        console.log(result);
         this.setState({
-          movies: [...this.state.movies, ...result.results]
+          movies: [...this.state.movies, ...result.results],
+          heroImage: this.state.heroImage || result.result[0],
+          currentPage: result.page,
+          totalPages: result.total_pages
         });
-        console.log(this.state.movies);
       });
   };
 

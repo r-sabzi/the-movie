@@ -113,7 +113,7 @@ export default class Home extends Component {
             })}
           </FourColGrid>
           {this.state.loading ? <Spinner /> : null}
-          {this.state.currentPage <= this.state.totalPages &&
+          {this.state.currentPage < this.state.totalPages &&
           !this.state.loading ? (
             <LoadMoreBtn text="Load More" onClick={this.loadMoreItems} />
           ) : null}
